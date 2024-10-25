@@ -6,13 +6,11 @@ import dev.inmo.micro_utils.common.Warning
 import dev.inmo.tgbotapi.bot.ktor.middlewares.TelegramBotMiddlewaresPipelinesHandler
 import dev.inmo.tgbotapi.types.update.abstracts.Update
 
-class UserAccessDenied: Throwable()
-
 @OptIn(Warning::class)
 fun TelegramBotMiddlewaresPipelinesHandler.Builder.restrictAccess(accessChecker: UserAccessChecker) {
 
     addMiddleware {
-        doOnAfterCallFactoryMakeCall { result, _, _ ->
+        doOnRequestResultPresented { result, _, _, _ ->
             when {
                 result != null && result !is ArrayList<*> -> result
                 result != null && result is ArrayList<*> -> (result as ArrayList<Update>).filter {
