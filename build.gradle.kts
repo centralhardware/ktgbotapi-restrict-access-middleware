@@ -18,13 +18,16 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+kotlin {
+    jvmToolchain(21)
+}
 
 
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = "me.centralhardware"
-            artifactId = "bot-common"
+            groupId = "me.centralhardware.telegram"
+            artifactId = "ktgbotapi-restrict-access-middleware"
             version = "1.0-SNAPSHOT"
             from(components["java"])
         }
