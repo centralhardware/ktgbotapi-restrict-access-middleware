@@ -1,5 +1,7 @@
 package me.centralhardware.telegram
 
+import dev.inmo.kslog.common.KSLog
+import dev.inmo.kslog.common.info
 import dev.inmo.micro_utils.common.Warning
 import dev.inmo.tgbotapi.bot.ktor.middlewares.TelegramBotMiddlewaresPipelinesHandler
 import dev.inmo.tgbotapi.types.update.abstracts.Update
@@ -14,7 +16,11 @@ fun TelegramBotMiddlewaresPipelinesHandler.Builder.restrictAccess(accessChecker:
             if (result != null && result !is ArrayList<*>) return@doOnAfterCallFactoryMakeCall result
 
             return@doOnAfterCallFactoryMakeCall (result as ArrayList<Update>).filter {
-                return@filter accessChecker.checkAccess(it.chatId())
+                val permitted = accessChecker.checkAccess(it.chatId())
+                if (!permitted) {
+                    KSLog.info("filter out update from unauthorized user ${it.chatId()}")
+                }
+                return@filter permitted
             }
         }
     }
