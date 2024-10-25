@@ -12,15 +12,16 @@ class UserAccessDenied: Throwable()
 fun TelegramBotMiddlewaresPipelinesHandler.Builder.restrictAccess(accessChecker: UserAccessChecker) {
 
     addMiddleware {
-        doOnAfterCallFactoryMakeCall { result, request, _ ->
-            if (result != null && result !is ArrayList<*>) return@doOnAfterCallFactoryMakeCall result
-
-            return@doOnAfterCallFactoryMakeCall (result as ArrayList<Update>).filter {
-                val permitted = accessChecker.checkAccess(it.chatId())
-                if (!permitted) {
-                    KSLog.info("filter out update from unauthorized user ${it.chatId()}")
+        doOnAfterCallFactoryMakeCall { result, _, _ ->
+            when {
+                result != null && result !is ArrayList<*> -> result
+                else -> (result as ArrayList<Update>).filter {
+                    val permitted = accessChecker.checkAccess(it.chatId())
+                    if (!permitted) {
+                        KSLog.info("filter out update from unauthorized user ${it.chatId()}")
+                    }
+                    permitted
                 }
-                return@filter permitted
             }
         }
     }
