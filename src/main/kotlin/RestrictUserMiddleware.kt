@@ -15,13 +15,14 @@ fun TelegramBotMiddlewaresPipelinesHandler.Builder.restrictAccess(accessChecker:
         doOnAfterCallFactoryMakeCall { result, _, _ ->
             when {
                 result != null && result !is ArrayList<*> -> result
-                else -> (result as ArrayList<Update>).filter {
+                result != null && result is ArrayList<*> -> (result as ArrayList<Update>).filter {
                     val permitted = accessChecker.checkAccess(it.chatId())
                     if (!permitted) {
                         KSLog.info("filter out update from unauthorized user ${it.chatId()}")
                     }
                     permitted
                 }
+                else -> null
             }
         }
     }
