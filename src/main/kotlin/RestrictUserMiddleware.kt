@@ -4,7 +4,11 @@ import dev.inmo.kslog.common.KSLog
 import dev.inmo.kslog.common.info
 import dev.inmo.micro_utils.common.Warning
 import dev.inmo.tgbotapi.bot.ktor.middlewares.TelegramBotMiddlewaresPipelinesHandler
+import dev.inmo.tgbotapi.types.update.abstracts.UnknownUpdate
 import dev.inmo.tgbotapi.types.update.abstracts.Update
+import kotlinx.serialization.json.JsonObject
+
+class AccessDeniedException : Exception("User access restricted")
 
 @OptIn(Warning::class)
 fun TelegramBotMiddlewaresPipelinesHandler.Builder.restrictAccess(accessChecker: UserAccessChecker) {
@@ -13,14 +17,16 @@ fun TelegramBotMiddlewaresPipelinesHandler.Builder.restrictAccess(accessChecker:
         doOnRequestResultPresented { result, _, _, _ ->
             when {
                 result != null && result !is ArrayList<*> -> result
-                result != null && result is ArrayList<*> -> (result as ArrayList<Update>).filter {
+                result != null && result is ArrayList<*> -> (result as ArrayList<Update>).map {
                     val permitted = accessChecker.checkAccess(it.chatId())
-                    if (!permitted) {
+                    if (permitted) {
+                        it
+                    } else {
                         KSLog.info("filter out update from unauthorized user ${it.chatId()}")
+                        UnknownUpdate(it.updateId, JsonObject(mapOf()), AccessDeniedException())
                     }
-                    permitted
                 }
-                else -> null
+                else -> result
             }
         }
     }
