@@ -22,7 +22,7 @@ fun TelegramBotMiddlewaresPipelinesHandler.Builder.restrictAccess(accessChecker:
                     if (permitted) {
                         it
                     } else {
-                        KSLog.info("filter out update from unauthorized user ${it.chatId()}")
+                        KSLog.info("filter out ${it::class.simpleName} from unauthorized user ${it.chatId()}")
                         UnknownUpdate(it.updateId, JsonObject(mapOf()), AccessDeniedException())
                     }
                 }
