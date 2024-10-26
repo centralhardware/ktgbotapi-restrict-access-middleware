@@ -8,7 +8,7 @@ import dev.inmo.tgbotapi.types.update.abstracts.Update
 fun Update.chatId(): Long? {
     return when (this) {
         is EditMessageUpdate -> data.from?.id?.chatId?.long
-        is MessageUpdate ->  data.from?.id?.chatId?.long
+        is MessageUpdate -> data.from?.id?.chatId?.long
         is EditChannelPostUpdate -> data.from?.id?.chatId?.long
         is ChannelPostUpdate -> null
         is ChosenInlineResultUpdate -> data.from.id.chatId.long

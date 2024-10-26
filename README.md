@@ -10,6 +10,10 @@ dependencies {
     implementation("com.github.centralhardware:ktgbotapi-restrict-access-middleware:<latest-version>")
 }
 ```
+add environment variable
+```shell
+export ALLOWED_USERS=<id1>,<id2>
+```
 install:
 ```kotlin
 telegramBotWithBehaviourAndLongPolling(
