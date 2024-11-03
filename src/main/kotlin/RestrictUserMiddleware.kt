@@ -19,17 +19,18 @@ fun TelegramBotMiddlewaresPipelinesHandler.Builder.restrictAccess(
         doOnRequestResultPresented { result, _, _, _ ->
             when (result) {
                 !is ArrayList<*> -> result
-                is ArrayList<*> -> (result as ArrayList<Update>).map {
-                    val permitted = accessChecker.checkAccess(it.chatId())
-                    if (permitted) {
-                        it
-                    } else {
-                        KSLog.info(
-                            "filter out ${it::class.simpleName} from unauthorized user ${it.chatId()}"
-                        )
-                        UnknownUpdate(it.updateId, JsonObject(mapOf()), AccessDeniedException())
+                is ArrayList<*> ->
+                    (result as ArrayList<Update>).map {
+                        val permitted = accessChecker.checkAccess(it.chatId())
+                        if (permitted) {
+                            it
+                        } else {
+                            KSLog.info(
+                                "filter out ${it::class.simpleName} from unauthorized user ${it.chatId()}"
+                            )
+                            UnknownUpdate(it.updateId, JsonObject(mapOf()), AccessDeniedException())
+                        }
                     }
-                }
 
                 else -> result
             }
