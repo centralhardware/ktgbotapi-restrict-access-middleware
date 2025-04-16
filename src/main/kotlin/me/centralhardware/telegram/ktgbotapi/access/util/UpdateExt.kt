@@ -1,10 +1,21 @@
-package me.centralhardware.telegram
+/**
+ * Extension functions for the Update class from the TGBotAPI library.
+ */
+package me.centralhardware.telegram.ktgbotapi.access.util
 
 import dev.inmo.tgbotapi.extensions.utils.extensions.raw.from
 import dev.inmo.tgbotapi.types.update.*
 import dev.inmo.tgbotapi.types.update.abstracts.UnknownUpdate
 import dev.inmo.tgbotapi.types.update.abstracts.Update
 
+/**
+ * Extracts the chat ID (user ID) from a Telegram update.
+ *
+ * This function attempts to extract the user ID from various types of updates.
+ * For some update types, no user ID is available, and null is returned.
+ *
+ * @return The user ID associated with this update, or null if no user ID is available.
+ */
 fun Update.chatId(): Long? {
     return when (this) {
         is EditMessageUpdate -> data.from?.id?.chatId?.long

@@ -8,6 +8,7 @@ A middleware for the [KTGBotAPI](https://github.com/InsanusMokrassar/ktgbotapi) 
 - Simple integration with KTGBotAPI
 - Configurable access control via environment variables
 - Customizable access checking logic
+- Well-documented and organized codebase
 
 ## Installation
 
@@ -48,6 +49,10 @@ export ALLOWED_USERS=123456789,987654321
 2. Add the middleware to your bot:
 
 ```kotlin
+// Import the necessary classes
+// import me.centralhardware.telegram.ktgbotapi.access.checker.EnvironmentVariableUserAccessChecker
+// import me.centralhardware.telegram.ktgbotapi.access.middleware.restrictAccess
+
 telegramBotWithBehaviourAndLongPolling(
     "<YOUR_BOT_TOKEN>",
     CoroutineScope(Dispatchers.IO),
@@ -66,6 +71,10 @@ telegramBotWithBehaviourAndLongPolling(
 You can create your own implementation of the `UserAccessChecker` interface to customize access control logic:
 
 ```kotlin
+// Import the necessary classes
+// import me.centralhardware.telegram.ktgbotapi.access.checker.UserAccessChecker
+// import me.centralhardware.telegram.ktgbotapi.access.middleware.restrictAccess
+
 class CustomUserAccessChecker : UserAccessChecker {
     // Your custom logic to determine if a user has access
     override fun checkAccess(userId: Long?): Boolean {
@@ -87,6 +96,16 @@ telegramBotWithBehaviourAndLongPolling(
     // Your bot behavior here
 }
 ```
+
+## Package Structure
+
+The library is organized into the following packages:
+
+- `me.centralhardware.telegram.ktgbotapi.access.checker`: Contains the `UserAccessChecker` interface and implementations
+- `me.centralhardware.telegram.ktgbotapi.access.middleware`: Contains the middleware implementation
+- `me.centralhardware.telegram.ktgbotapi.access.exception`: Contains exceptions used by the middleware
+- `me.centralhardware.telegram.ktgbotapi.access.util`: Contains utility functions
+
 
 ## How It Works
 
