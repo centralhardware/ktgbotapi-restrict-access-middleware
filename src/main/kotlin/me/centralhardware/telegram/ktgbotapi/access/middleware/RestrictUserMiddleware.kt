@@ -52,4 +52,5 @@ fun TelegramBotMiddlewaresPipelinesHandler.Builder.restrictAccess(
             }
         }
     }
+    KSLog.info("Initialize restrict access middleware with access checker: ${accessChecker::class.simpleName}")
 }
