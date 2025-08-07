@@ -2,7 +2,6 @@ plugins {
     java
     `maven-publish`
     kotlin("jvm") version "2.2.0"
-    id("org.jetbrains.dokka") version "2.0.0"
 }
 
 group = "me.centralhardware.telegram"
@@ -13,16 +12,12 @@ repositories {
 }
 
 dependencies {
-    implementation("dev.inmo:tgbotapi:27.1.1")
+    implementation("dev.inmo:tgbotapi:27.1.2")
     implementation("dev.inmo:kslog:1.5.0")
 }
 
 tasks.test {
     useJUnitPlatform()
-}
-
-tasks.dokkaHtml.configure {
-    outputDirectory.set(file("${buildDir}/dokka"))
 }
 
 publishing {
