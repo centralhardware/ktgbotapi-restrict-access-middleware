@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    implementation("dev.inmo:tgbotapi:27.1.2")
+    implementation("dev.inmo:tgbotapi:28.0.0")
     implementation("dev.inmo:kslog:1.5.0")
 }
 
